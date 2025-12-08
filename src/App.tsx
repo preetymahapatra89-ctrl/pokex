@@ -1,5 +1,11 @@
+
 import { useEffect, useState } from 'react'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import About from "./components/About"
+import Stats from "./components/Stats"
 import Header from "./components/Header"
+import Favourites from "./components/Favourites"
+import PokemonDetails from "./components/PokemonDetails"
 import './App.css'
 import Footer from './components/footer'
 import type {Pokemon} from "../src/types/pokemon"
@@ -39,17 +45,33 @@ function App() {
   };
 
   return (
-    <>
-      <Header pokemon={allPokemon} setFiltered={setFiltered}/>
+    <BrowserRouter>
+      <Header pokemon={allPokemon} setFiltered={setFiltered} />
 
       <main className="container">
-        {loading && <div className="loading">Loading Pokémon...</div>}
-        {error && <div className="error">Failed to load data.</div>}
-        {!loading && !error && <PokemonGrid data={filtered} />}
+        <Routes>
+          {/* Home Page */}
+          <Route
+            path="/"
+            element={
+              <>
+                {loading && <div className="loading">Loading Pokémon...</div>}
+                {error && <div className="error">Failed to load data.</div>}
+                {!loading && !error && <PokemonGrid data={filtered} />}
+              </>
+            }
+          />
+
+          {/* About Page */}
+          <Route path="/about" element={<About />} />
+          <Route path="/pokemon/:name" element={<PokemonDetails />} />
+          <Route path="/stats" element={<Stats />} />
+          <Route path="/favourites" element={<Favourites />} />
+        </Routes>
       </main>
 
-      < Footer />
-    </>
+      <Footer />
+    </BrowserRouter>
   )
 }
 
