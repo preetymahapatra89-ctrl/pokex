@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import About from "./components/About"
 import Stats from "./components/Stats"
 import Header from "./components/Header"
+import SearchBar from "./components/SearchBar";
 import Favourites from "./components/Favourites"
 import PokemonDetails from "./components/PokemonDetails"
 import './App.css'
@@ -16,6 +17,8 @@ function App() {
   const [filtered, setFiltered] = useState<Pokemon[]>([])
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [companentName, setComponentName] = useState("Favourites");
+  const [favourites, setFavourites] = useState(JSON.parse(localStorage.getItem("favourites") || "[]"));
 
   useEffect(() => {
     fetchPokemon();
@@ -31,6 +34,7 @@ function App() {
         return {
           name: p.name,
           url: p.url,
+          id,
           image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
         
         }
@@ -44,9 +48,24 @@ function App() {
     }
   };
 
+  const handleSearch = (value: string) => {
+    value = value.toLowerCase();
+    const result = allPokemon.filter((p) => p.name.includes(value));
+    setFiltered(result);
+  };
+
+  const addToFavourite = (pokemon) => {
+    const already = favourites.find((p) => p.id === pokemon.id);
+    if (!already) {
+      const newFavs = [...favourites, pokemon];
+      setFavourites(newFavs);
+      localStorage.setItem("favourites", JSON.stringify(newFavs));
+    }
+  };
+
   return (
     <BrowserRouter>
-      <Header pokemon={allPokemon} setFiltered={setFiltered} />
+      <Header />
 
       <main className="container">
         <Routes>
@@ -55,6 +74,7 @@ function App() {
             path="/"
             element={
               <>
+               <SearchBar onSearch={handleSearch} />
                 {loading && <div className="loading">Loading Pokémon...</div>}
                 {error && <div className="error">Failed to load data.</div>}
                 {!loading && !error && <PokemonGrid data={filtered} />}
@@ -64,9 +84,19 @@ function App() {
 
           {/* About Page */}
           <Route path="/about" element={<About />} />
-          <Route path="/pokemon/:name" element={<PokemonDetails />} />
+          <Route path="/pokemon/:id" element={
+            <PokemonDetails setError={setError}
+              error={error} setLoading={setLoading}
+              loading={loading} addToFavourite={addToFavourite}
+            />
+          } 
+          />
           <Route path="/stats" element={<Stats />} />
-          <Route path="/favourites" element={<Favourites />} />
+          <Route path="/favourites" element={<Favourites  setFavourites={setFavourites} 
+                  favourites={favourites} componentName={companentName}
+                  setComponentName={setComponentName}
+            />} 
+          />
         </Routes>
       </main>
 
