@@ -17,6 +17,7 @@ function App() {
   const [filtered, setFiltered] = useState<Pokemon[]>([])
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [searchKey, setSearchKey] = useState("");
   const [companentName, setComponentName] = useState("Favourites");
   const [favourites, setFavourites] = useState(JSON.parse(localStorage.getItem("favourites") || "[]"));
 
@@ -49,6 +50,7 @@ function App() {
   };
 
   const handleSearch = (value: string) => {
+    setSearchKey(value);
     value = value.toLowerCase();
     const result = allPokemon.filter((p) => p.name.includes(value));
     setFiltered(result);
@@ -74,7 +76,7 @@ function App() {
             path="/"
             element={
               <>
-               <SearchBar onSearch={handleSearch} />
+               <SearchBar onSearch={handleSearch} searchKey={searchKey}/>
                 {loading && <div className="loading">Loading Pokémon...</div>}
                 {error && <div className="error">Failed to load data.</div>}
                 {!loading && !error && <PokemonGrid data={filtered} />}
