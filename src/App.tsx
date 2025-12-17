@@ -4,9 +4,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import About from "./components/About"
 import Stats from "./components/Stats"
 import Header from "./components/Header"
-import SearchBar from "./components/SearchBar";
+import SearchBar from "./components/SearchBar"
 import Favourites from "./components/Favourites"
 import PokemonDetails from "./components/PokemonDetails"
+import CommentBox from "./components/CommentBox"
 import './App.css'
 import Footer from './components/footer'
 import type {Pokemon} from "../src/types/pokemon"
@@ -94,6 +95,7 @@ function App() {
           } 
           />
           <Route path="/stats" element={<Stats />} />
+          <Route path="/comments" element={<CommentBox />} />
           <Route path="/favourites" element={<Favourites  setFavourites={setFavourites} 
                   favourites={favourites} componentName={companentName}
                   setComponentName={setComponentName}

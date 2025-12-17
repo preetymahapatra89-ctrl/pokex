@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import type { Pokemon } from "../types/pokemon";
+import CommentBox from "./CommentBox";
 
 interface Props {
   error: boolean;
@@ -54,8 +55,7 @@ export default function PokemonDetails({ setError, error, setLoading, loading, a
         <button onClick={() => addToFavourite(pokemon)}>
           Add to Favourite
         </button>
-      }
-      
+      }      
     </div>
   );
 
