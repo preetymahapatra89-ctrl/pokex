@@ -52,6 +52,21 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+.bg-blue-500 {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.bg-blue-600 {
+  background-color: #2563eb;
+  color: white;
+}
+
+.bg-blue-700 {
+  background-color: #1d4ed8;
+  color: white;
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -129,5 +144,13 @@ button:focus-visible {
     color: #1b4f8a;
     border-bottom: 2px solid #1b4f8a;
   }
+  .text-xs {
+  font-size: 0.75rem; /* 12px */
+  line-height: 1rem; /* 16px */
+}
+
+.text-gray-500 {
+  color: #6b7280; /* gray */
+}
 
 }

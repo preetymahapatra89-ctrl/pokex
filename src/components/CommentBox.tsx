@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type {Comment} from "../types/comments";
 const COMMENT_STORAGE_KEY = "comments";
+const likeCount = 0;
 
 export default function CommentSection() {
   const [input, setInput] = useState("");
@@ -8,23 +9,21 @@ export default function CommentSection() {
     const saved = localStorage.getItem("comments");
     return saved ? JSON.parse(saved) : [];
   });
-  const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [text, setText] = useState("");
   const [editText, setEditText] = useState("");
+  const [replyingTo, setReplyingTo] = useState<number | null>(null);
+  const [replyText, setReplyText] = useState("");
 
- /*  useEffect(() => {
+  useEffect(() => {
     const savedComments = localStorage.getItem(COMMENT_STORAGE_KEY);
      if (savedComments) {
       setComments(JSON.parse(savedComments));
-      console.log(savedComments);
     }
-  }, []); */
+  }, []);
 
   useEffect(() => {
-    console.log('a');
     localStorage.setItem(COMMENT_STORAGE_KEY, JSON.stringify(comments))
-    console.log(localStorage.getItem(COMMENT_STORAGE_KEY));
   }, [comments]); 
 
   const handleCommentAdd = () => {
@@ -33,10 +32,11 @@ export default function CommentSection() {
       id: Date.now(),
       text:input,
       createdAt: new Date().toLocaleString(),
-      // likes:0,
-      // replies: [],
+      likes:0,
+      replies: [],
     };
     setComments([...comments, newComments]);
+    setInput("")
   }
 
   const handleCommentEdit = (commentId: number, text: string) => {
@@ -51,10 +51,45 @@ export default function CommentSection() {
     setText(text);      
 
   }
-  
+  const handleCommentLike = (id: number) => {
+    setComments((comment) =>
+      comment.map((c) =>
+        c.id === id ? { ...c, likes: c.likes + 1 } : c
+      )
+    );
+  }
+
+  const handleReplyComment = (id: number) => {
+    if (!replyText.trim()) return;
+    const newReply = {
+      id: Date.now(),
+      text: replyText,
+      createdAt: new Date().toLocaleString(),
+    };
+
+    setComments((prev) =>
+      prev.map((comment) =>
+        comment.id === id
+          ? { ...comment, replies: [...(comment.replies || []), newReply] }
+          : comment
+      )
+    );
+
+    setReplyText("");
+    setReplyingTo(null);
+  }
+
+  const handleCommentDelete = (id:number) => {
+    const confirmed = window.confirm(
+        "Are you sure you want to delete this comment?"
+      );
+      if (!confirmed) return;
+      setComments((prev) =>
+        prev.filter((comment) => comment.id !== id)
+      );
+  }
 
   return (
-
     <div className="max-w-2xl mx-auto mt-10">
       <h2 className="text-2xl font-bold mb-4">💬 Interactive Comment Section</h2>
       <div className="search-box">
@@ -65,7 +100,7 @@ export default function CommentSection() {
           onClick={handleCommentAdd}
         >
           Add Comment
-        </button>
+        </button> &nbsp; &nbsp;
          <button
             className="bg-blue-600 text-white px-3 rounded"
             onClick={() => {
@@ -85,39 +120,97 @@ export default function CommentSection() {
           <li key={c.id} className="border p-3 rounded">
             {/* <p className="font-semibold">{c.author}</p> */}
             {editingId === c.id ? (
+                <div className="search-box">
+                  <input
+                  value={editText} onChange={(e) => setEditText(e.target.value)}
+                  /> &nbsp;&nbsp;
+                  <button
+                    className="bg-blue-600 text-white px-3 rounded"
+                    onClick={() => {handleCommentEdit(c.id, editText)}}
+                  >
+                    Save
+                  </button>  &nbsp; &nbsp;
+                  <button
+                    className="bg-blue-600 text-white px-3 rounded"
+                    onClick={() => {
+                      setEditingId(null);
+                      setEditText(c.text); // load original text
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <p>{c.text} &nbsp;
+                  <span className="text-xs text-gray-500">
+                    {c.createdAt}
+                  </span> 
+                </p> 
+              )
+            }
+            {replyingTo === c.id && (
               <div className="search-box">
                 <input
-                value={editText} onChange={(e) => setEditText(e.target.value)}
-                /> &nbsp;&nbsp;
-                <button
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  placeholder="Write a reply..."
+                />
+                &nbsp;
+                <button 
                   className="bg-blue-600 text-white px-3 rounded"
-                  onClick={() => {handleCommentEdit(c.id, editText)}}
+                  onClick={() => handleReplyComment(c.id)}
                 >
-                  Save
+                  Post
                 </button>
-                 <button
+                &nbsp;
+                <button 
                   className="bg-blue-600 text-white px-3 rounded"
-                  onClick={() => {
-                    setEditingId(null);
-                    setEditText(c.text); // load original text
-                  }}
-                >
+                  onClick={() => setReplyingTo(null)}>
                   Cancel
                 </button>
               </div>
-            ) : (
-                <p>{c.text}</p> 
-                )
-              }
-            <span className="text-xs text-gray-500">
+            )}
+           {/*  <span className="text-xs text-gray-500">
               {c.createdAt}
-            </span>
+            </span> */}
             <div className="flex gap-3 text-sm mt-2 text-gray-600">
-              {/* <button >👍 0</button>
-              <button >Reply</button> */}
-              <button onClick={() => {setEditingId(c.id), setEditText(c.text)}}>Edit</button>
-              {/* <button  className="text-red-500">Delete</button> */}
+              <button className="bg-blue-600 text-white px-3 rounded"
+                onClick={(() => {handleCommentLike(c.id)})}
+              >
+                👍 {c.likes}
+              </button> &nbsp;
+              <button 
+                className="bg-blue-600 text-white px-3 rounded" 
+                onClick={() =>{setReplyingTo(c.id)}}
+              >Reply
+              </button> &nbsp;
+              <button 
+                className="bg-blue-600 text-white px-3 rounded" 
+                onClick={() => {setEditingId(c.id), setEditText(c.text)}}
+              >Edit
+              </button> &nbsp;
+              <button  
+                className="bg-blue-600 text-white px-3 rounded"
+                onClick={(() => {handleCommentDelete(c.id)})}
+              >Delete
+              </button>
             </div>
+            {(c.replies ?? []).length > 0 && (
+              <ul className="ml-6 mt-3 space-y-2">
+                {c.replies.map((r) => (
+                  <li key={r.id} className="border-l pl-3">
+                    <p>{r.text} &nbsp;
+                      <span className="text-xs text-gray-500">
+                        {r.createdAt}
+                      </span> 
+                    </p>
+                    {/* <span className="text-xs text-gray-500">
+                      {r.createdAt}
+                    </span> */}
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
         ))
 
