@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 interface Props {
   pokemon: Pokemon;
   componentName: string
-  setComponentName: React.Dispatch<React.SetStateAction<any[]>>;
+  setComponentName: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function PokemonCard({ pokemon, componentName,  setComponentName}: Props) {

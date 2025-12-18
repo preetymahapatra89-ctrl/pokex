@@ -3,4 +3,7 @@ export interface Pokemon {
   url: string;
   id: string;
   image: string;
+  sprites: {
+    front_default: string;
+  };
 }

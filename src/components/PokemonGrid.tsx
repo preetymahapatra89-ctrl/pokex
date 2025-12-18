@@ -3,8 +3,8 @@ import PokemonCard from "./PokemonCard";
 
 interface Props {
   data: Pokemon[];
-  componentName: string
-  setComponentName: React.Dispatch<React.SetStateAction<any[]>>;
+  componentName: string;
+  setComponentName: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function PokemonGrid({ data, componentName, setComponentName }: Props) {

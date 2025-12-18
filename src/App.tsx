@@ -19,7 +19,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [searchKey, setSearchKey] = useState("");
-  const [companentName, setComponentName] = useState("Favourites");
+  const [componentName, setComponentName] = useState<string>("Favourites");
   const [favourites, setFavourites] = useState(JSON.parse(localStorage.getItem("favourites") || "[]"));
 
   useEffect(() => {
@@ -57,8 +57,8 @@ function App() {
     setFiltered(result);
   };
 
-  const addToFavourite = (pokemon) => {
-    const already = favourites.find((p) => p.id === pokemon.id);
+  const addToFavourite = (pokemon: Pokemon) => {
+    const already = favourites.find((p: Pokemon) => p.id === pokemon.id);
     if (!already) {
       const newFavs = [...favourites, pokemon];
       setFavourites(newFavs);
@@ -80,7 +80,7 @@ function App() {
                <SearchBar onSearch={handleSearch} searchKey={searchKey}/>
                 {loading && <div className="loading">Loading Pokémon...</div>}
                 {error && <div className="error">Failed to load data.</div>}
-                {!loading && !error && <PokemonGrid data={filtered} />}
+                {!loading && !error && <PokemonGrid data={filtered} componentName={""} setComponentName={setComponentName}/>}
               </>
             }
           />
@@ -97,7 +97,7 @@ function App() {
           <Route path="/stats" element={<Stats />} />
           <Route path="/comments" element={<CommentBox />} />
           <Route path="/favourites" element={<Favourites  setFavourites={setFavourites} 
-                  favourites={favourites} componentName={companentName}
+                  favourites={favourites} componentName={componentName}
                   setComponentName={setComponentName}
             />} 
           />

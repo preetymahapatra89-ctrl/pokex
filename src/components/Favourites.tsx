@@ -6,7 +6,7 @@ interface Props {
   favourites: Pokemon[];
   setFavourites: React.Dispatch<React.SetStateAction<any[]>>;
   componentName: string;
-  setComponentName: React.Dispatch<React.SetStateAction<any[]>>;
+  setComponentName: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function Favourites({favourites, setFavourites, componentName, setComponentName} : Props) {
