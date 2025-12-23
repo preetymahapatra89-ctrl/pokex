@@ -1,31 +1,41 @@
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import PokemonCard from "./PokemonCard";
 import type { Pokemon } from "../types/pokemon";
 
 interface Props {
   favourites: Pokemon[];
-  setFavourites: React.Dispatch<React.SetStateAction<any[]>>;
+  setFavourites: React.Dispatch<React.SetStateAction<Pokemon[]>>;
   componentName: string;
   setComponentName: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function Favourites({favourites, setFavourites, componentName, setComponentName} : Props) {
-useEffect(() => {
+export default function Favourites({
+  favourites,
+  componentName,
+  setComponentName,
+}: Props) {
+  /* useEffect(() => {
     const favs = JSON.parse(localStorage.getItem("favourites") || "[]");
     setFavourites(favs);
-  }, []);
+  }, []); */
 
-  if( favourites.length === 0 ) return <p>No favourites added yet</p>;
+  if (favourites.length === 0) return <p>No favourites added yet</p>;
 
   return (
     <>
-      <h2>Your Favourites</h2>
+      <h2 className="text-lg md:text-2xl font-extrabold tracking-wide text-blue-700">
+        Your Favourites
+      </h2>
       <div className="pokemon-grid">
-          {favourites.map((p) => (
-            <PokemonCard key={p.name} pokemon={p} componentName={componentName} setComponentName={setComponentName}/>
-          ))}
+        {favourites.map((p) => (
+          <PokemonCard
+            key={p.name}
+            pokemon={p}
+            componentName={componentName}
+            setComponentName={setComponentName}
+          />
+        ))}
       </div>
-        
     </>
   );
 }

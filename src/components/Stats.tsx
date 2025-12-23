@@ -1,17 +1,8 @@
 import { useEffect, useState } from "react";
 import BaseStatSinglePokemon from "./BaseStatSinglePokemon";
+import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import { Bar, BarChart, XAxis, YAxis } from "recharts";
 import type { PokemonStat } from "../types/pokemonStat";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  Legend,
-  Bar,
-  BarChart,
-  XAxis,
-  YAxis,
-} from "recharts";
 
 export default function PokemonTypeDistribution() {
   const [data, setData] = useState<PokemonStat[]>([]);
@@ -70,10 +61,6 @@ export default function PokemonTypeDistribution() {
 
     loadTypes();
   }, [data]);
-
-  const  x=()=>{console.log("hi")}
-
-
   if (loading) return <p>Loading…</p>;
 
   return (

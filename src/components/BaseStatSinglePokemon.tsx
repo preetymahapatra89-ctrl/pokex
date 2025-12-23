@@ -6,10 +6,11 @@ import {
   PolarAngleAxis,
   Tooltip,
 } from "recharts";
+import type { PokemonStat } from "../types/pokemonStat";
 
 export default function BaseStatSinglePokemon() {
   const [pokemonName, setPokemonName] = useState("");
-  const [stats, setStats] = useState<any[]>([]);
+  const [stats, setStats] = useState<PokemonStat[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -33,13 +34,14 @@ export default function BaseStatSinglePokemon() {
 
       const data = await res.json();
 
-      const formattedStats = data.stats.map((s: any) => ({
+      const formattedStats = data.stats.map((s: PokemonStat) => ({
         stat: s.stat.name,
         value: s.base_stat,
       }));
 
       setStats(formattedStats);
     } catch (err) {
+      console.log("Error", err);
       setError("Something went wrong!");
     }
 
