@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import BaseStatSinglePokemon from "./BaseStatSinglePokemon";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
-import type { PokemonStat } from "../types/pokemonStat";
+import type { PokemonStat, PokemonStatForChart } from "../types/pokemonStat";
+import { getPokemonList } from "../services/pokemon.service";
 
 export default function PokemonTypeDistribution() {
-  const [data, setData] = useState<PokemonStat[]>([]);
+  const [data, setData] = useState<PokemonStatForChart[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Optional: nice colors
@@ -33,8 +34,7 @@ export default function PokemonTypeDistribution() {
   useEffect(() => {
     async function loadTypes() {
       // Fetch Pokémon
-      const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100");
-      const list = await res.json();
+      const list = await getPokemonList(20);
 
       const typeCount: Record<string, number> = {};
 
@@ -49,18 +49,20 @@ export default function PokemonTypeDistribution() {
       }
 
       // Convert to Recharts format
-      const formatted = Object.entries(typeCount).map(([type, count]) => ({
-        name: type,
-        value: count,
-      }));
+      const formatted: PokemonStatForChart[] = Object.entries(typeCount).map(
+        ([type, count]) => ({
+          name: type,
+          value: count,
+        })
+      );
 
       setData(formatted);
       setLoading(false);
-      console.log({ data });
     }
 
     loadTypes();
   }, [data]);
+
   if (loading) return <p>Loading…</p>;
 
   return (

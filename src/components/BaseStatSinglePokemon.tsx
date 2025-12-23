@@ -6,11 +6,12 @@ import {
   PolarAngleAxis,
   Tooltip,
 } from "recharts";
-import type { PokemonStat } from "../types/pokemonStat";
+import type { BaseStatForSinglePokemon } from "../types/pokemonStat";
+import { getPokemonByName } from "../services/pokemon.service";
 
 export default function BaseStatSinglePokemon() {
   const [pokemonName, setPokemonName] = useState("");
-  const [stats, setStats] = useState<PokemonStat[]>([]);
+  const [stats, setStats] = useState<BaseStatForSinglePokemon[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -22,19 +23,18 @@ export default function BaseStatSinglePokemon() {
     setStats([]);
 
     try {
-      const res = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`
-      );
+      const res = await getPokemonByName(pokemonName);
+      //console.log(res);
 
-      if (!res.ok) {
+      if (!res) {
         setError("Pokemon not found!");
         setLoading(false);
         return;
       }
 
-      const data = await res.json();
+      //const data = await res.json();
 
-      const formattedStats = data.stats.map((s: PokemonStat) => ({
+      const formattedStats: BaseStatForSinglePokemon[] = res.stats.map((s) => ({
         stat: s.stat.name,
         value: s.base_stat,
       }));

@@ -11,6 +11,7 @@ import "./App.css";
 import Footer from "./components/footer";
 import type { Pokemon } from "../src/types/pokemon";
 import PokemonGrid from "../src/components/PokemonGrid";
+import { getPokemonList } from "./services/pokemon.service";
 
 function App() {
   const [allPokemon, setAllPokemon] = useState<Pokemon[]>([]);
@@ -26,8 +27,7 @@ function App() {
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
-        const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100");
-        const data = await res.json();
+        const data = await getPokemonList(58);
 
         const formatted = data.results.map((p: Pokemon) => {
           const id = p.url.split("/")[6];
@@ -36,6 +36,10 @@ function App() {
             url: p.url,
             id,
             image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
+            sprites: {
+              front_default: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
+            },
+            height: p.height,
           };
         });
         setAllPokemon(formatted);
