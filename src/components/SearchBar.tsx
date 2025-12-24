@@ -1,9 +1,6 @@
-interface Props {
-  onSearch: (value: string) => void;
-  searchKey: string;
-}
+import type { SearchProps } from "../types/search";
 
-export default function SearchBar({ onSearch, searchKey }: Props) {
+export default function SearchBar({ onSearch, searchKey }: SearchProps) {
   return (
     <div className="search-box">
       <input

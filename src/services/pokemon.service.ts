@@ -1,5 +1,5 @@
 import { apiGet } from "./api";
-import type { Pokemon } from "../types/pokemon";
+import type { Pokemon, PokemonAdditionalDetails } from "../types/pokemon";
 import type { PokemonStat } from "../types/pokemonStat";
 
 export function getPokemonList(limit = 20) {
@@ -8,4 +8,8 @@ export function getPokemonList(limit = 20) {
 
 export function getPokemonByName(name: string) {
   return apiGet<PokemonStat>(`/pokemon/${name.toLowerCase()}`);
+}
+
+export function getPokemonById(id: string) {
+  return apiGet<PokemonAdditionalDetails>(`/pokemon/${id}`);
 }

@@ -31,6 +31,7 @@ function App() {
 
         const formatted = data.results.map((p: Pokemon) => {
           const id = p.url.split("/")[6];
+          console.log(p);
           return {
             name: p.name,
             url: p.url,
@@ -39,7 +40,6 @@ function App() {
             sprites: {
               front_default: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
             },
-            height: p.height,
           };
         });
         setAllPokemon(formatted);

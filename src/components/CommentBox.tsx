@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import type { Comment } from "../types/comments";
+import ConfirmModal from "./ui/ConfirmModal";
 const COMMENT_STORAGE_KEY = "comments";
 
 export default function CommentSection() {
@@ -9,18 +10,12 @@ export default function CommentSection() {
     return saved ? JSON.parse(saved) : [];
   });
   const [editingId, setEditingId] = useState<number | null>(null);
-  //const [text, setText] = useState("");
   const [editText, setEditText] = useState("");
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
   const [replyText, setReplyText] = useState("");
   const [idRef] = useState(() => Date.now());
-
-  /*   useEffect(() => {
-    const savedComments = localStorage.getItem(COMMENT_STORAGE_KEY);
-     if (savedComments) {
-      setComments(JSON.parse(savedComments));
-    }
-  }, []); */
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
 
   useEffect(() => {
     localStorage.setItem(COMMENT_STORAGE_KEY, JSON.stringify(comments));
@@ -75,11 +70,24 @@ export default function CommentSection() {
   };
 
   const handleCommentDelete = (id: number) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this comment?"
+    setCommentToDelete(id);
+    setShowConfirm(true);
+  };
+
+  const confirmDelete = () => {
+    if (commentToDelete === null) return;
+
+    setComments((prev) =>
+      prev.filter((comment) => comment.id !== commentToDelete)
     );
-    if (!confirmed) return;
-    setComments((prev) => prev.filter((comment) => comment.id !== id));
+
+    setShowConfirm(false);
+    setCommentToDelete(null);
+  };
+
+  const cancelDelete = () => {
+    setShowConfirm(false);
+    setCommentToDelete(null);
   };
 
   return (
@@ -237,6 +245,15 @@ export default function CommentSection() {
           </li>
         ))}
       </ul>
+
+      {/* Modal For Delete Confirmation */}
+      <ConfirmModal
+        open={showConfirm}
+        title="Delete comment?"
+        message="Are you sure you want to delete this comment?"
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+      />
     </div>
   );
 }

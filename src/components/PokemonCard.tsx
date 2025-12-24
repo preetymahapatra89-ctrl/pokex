@@ -1,13 +1,10 @@
-import type { Pokemon } from "../types/pokemon";
 import { Link } from "react-router-dom";
+import type { PokemonCardProps } from "../types/pokemonCard";
 
-interface Props {
-  pokemon: Pokemon;
-  componentName: string;
-  setComponentName: React.Dispatch<React.SetStateAction<string>>;
-}
-
-export default function PokemonCard({ pokemon, componentName }: Props) {
+export default function PokemonCard({
+  pokemon,
+  componentName,
+}: PokemonCardProps) {
   return (
     <div key={pokemon.name} className="bg-gray-200 p-4 rounded-2xl">
       <Link to={`/pokemon/${pokemon.id}`}>

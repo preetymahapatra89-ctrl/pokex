@@ -1,14 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import type { Pokemon } from "../types/pokemon";
-
-interface Props {
-  error: boolean;
-  setError: React.Dispatch<React.SetStateAction<boolean>>;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  addToFavourite: (pokemon: Pokemon) => void;
-}
+import type { PokemonDetailsProps } from "../types/pokemonDetails";
+import type { Pokemon, PokemonAdditionalDetails } from "../types/pokemon";
+import ConfirmModal from "./ui/ConfirmModal";
+import { getPokemonById } from "../services/pokemon.service";
 
 export default function PokemonDetails({
   setError,
@@ -16,17 +11,18 @@ export default function PokemonDetails({
   setLoading,
   loading,
   addToFavourite,
-}: Props) {
-  const [pokemon, setPokemon] = useState<Pokemon[]>([]);
+}: PokemonDetailsProps) {
+  const [pokemon, setPokemon] = useState<PokemonAdditionalDetails | null>(null);
   const { id } = useParams();
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [pokemonToRemove, setPokemonToRemove] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return; // stop if id is undefined
 
     const fetchPokemonDetails = async (id: string) => {
       try {
-        const res = await fetch("https://pokeapi.co/api/v2/pokemon/" + id);
-        const data = await res.json();
+        const data = await getPokemonById(id);
         setPokemon(data);
         setLoading(false);
       } catch {
@@ -40,10 +36,34 @@ export default function PokemonDetails({
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Some Error Occured...</p>;
+  if (!pokemon) {
+    return <p>Loading Pokémon...</p>;
+  }
 
   const favourites = JSON.parse(localStorage.getItem("favourites") || "[]");
 
   const isFavourite = favourites.some((p: Pokemon) => p.id === pokemon.id);
+
+  const handleRemoveFromFavourites = (id: string) => {
+    setPokemonToRemove(id);
+    setShowConfirm(true);
+  };
+
+  const confirmDelete = () => {
+    if (pokemonToRemove === null) return;
+
+    const updatedFavourites = favourites.filter(
+      (p: Pokemon) => p.id !== pokemonToRemove
+    );
+    localStorage.setItem("favourites", JSON.stringify(updatedFavourites));
+    setPokemonToRemove(null);
+    setShowConfirm(false);
+  };
+
+  const cancelDelete = () => {
+    setPokemonToRemove(null);
+    setShowConfirm(false);
+  };
 
   return (
     <div
@@ -86,9 +106,34 @@ export default function PokemonDetails({
       </div>
 
       {isFavourite ? (
-        <p className="text-yellow-500 font-semibold flex items-center justify-center gap-1">
-          ⭐ Added to Favourites!
-        </p>
+        <div>
+          <p className="text-yellow-500 font-semibold flex items-center justify-center gap-1">
+            ⭐ Added to Favourites!
+          </p>
+          <button
+            onClick={() => handleRemoveFromFavourites(pokemon.id)}
+            className="
+            ml-3mt-3
+            w-full
+            text-red-600 hover:text-red-800 
+            text-sm 
+            py-2 px-4
+            rounded-lg
+            transition 
+            cursor-pointer"
+          >
+            ❌ Remove From Favourites
+          </button>
+
+          {/* Modal For Delete Confirmation */}
+          <ConfirmModal
+            open={showConfirm}
+            title="Delete Favourite?"
+            message="Are you sure you want to remove the pokemon from Favourites?"
+            onConfirm={confirmDelete}
+            onCancel={cancelDelete}
+          />
+        </div>
       ) : (
         <button
           onClick={() => addToFavourite(pokemon)}

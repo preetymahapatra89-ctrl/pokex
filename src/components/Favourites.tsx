@@ -1,24 +1,12 @@
 // import { useEffect } from "react";
 import PokemonCard from "./PokemonCard";
-import type { Pokemon } from "../types/pokemon";
-
-interface Props {
-  favourites: Pokemon[];
-  setFavourites: React.Dispatch<React.SetStateAction<Pokemon[]>>;
-  componentName: string;
-  setComponentName: React.Dispatch<React.SetStateAction<string>>;
-}
+import type { FavouritesProps } from "../types/favourites";
 
 export default function Favourites({
   favourites,
   componentName,
   setComponentName,
-}: Props) {
-  /* useEffect(() => {
-    const favs = JSON.parse(localStorage.getItem("favourites") || "[]");
-    setFavourites(favs);
-  }, []); */
-
+}: FavouritesProps) {
   if (favourites.length === 0) return <p>No favourites added yet</p>;
 
   return (
