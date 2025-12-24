@@ -4,32 +4,14 @@ import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
 import type { PokemonStat, PokemonStatForChart } from "../types/pokemonStat";
 import { getPokemonList } from "../services/pokemon.service";
+import { ENV } from "../config/env";
 
 export default function PokemonTypeDistribution() {
   const [data, setData] = useState<PokemonStatForChart[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Optional: nice colors
-  const COLORS = [
-    "#FF5959",
-    "#4E8CFF",
-    "#78C850",
-    "#F5DE50",
-    "#AA5BAA",
-    "#FF9C54",
-    "#9DB7F5",
-    "#A7DB8D",
-    "#FA92B2",
-    "#D1C17D",
-    "#A292BC",
-    "#A38C21",
-    "#EE99AC",
-    "#C03028",
-    "#705848",
-    "#6F35FC",
-    "#98D8D8",
-    "#735797",
-  ];
+  // COLORS FOR PIE
+  const COLORS = ENV.COLORS;
 
   useEffect(() => {
     async function loadTypes() {

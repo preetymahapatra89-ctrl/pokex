@@ -1,6 +1,6 @@
-import type { Pokemon } from "../types/pokemon";
+import type { PokemonAdditionalDetails } from "../types/pokemon";
 export interface PokemonCardProps {
-  pokemon: Pokemon;
+  pokemon: PokemonAdditionalDetails;
   componentName: string;
   setComponentName: React.Dispatch<React.SetStateAction<string>>;
 }

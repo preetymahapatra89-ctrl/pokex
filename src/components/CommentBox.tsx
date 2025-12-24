@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import type { Comment } from "../types/comments";
 import ConfirmModal from "./ui/ConfirmModal";
-const COMMENT_STORAGE_KEY = "comments";
+import { ENV } from "../config/env";
+const COMMENT_STORAGE_KEY = ENV.COMMENT_STORAGE_KEY;
 
 export default function CommentSection() {
   const [input, setInput] = useState("");

@@ -13,6 +13,7 @@ import type { Pokemon } from "../src/types/pokemon";
 import PokemonGrid from "../src/components/PokemonGrid";
 import { getPokemonList } from "./services/pokemon.service";
 import NotFound from "./components/NotFound";
+import { ENV } from "./config/env";
 
 function App() {
   const [allPokemon, setAllPokemon] = useState<Pokemon[]>([]);
@@ -24,6 +25,8 @@ function App() {
   const [favourites, setFavourites] = useState(
     JSON.parse(localStorage.getItem("favourites") || "[]")
   );
+  const POKEMON_IMAGE_URL = ENV.POKEMON_IMAGE_URL;
+  const POKEMON_IMAGE_EXT = ENV.POKEMON_IMAGE_EXT;
 
   useEffect(() => {
     const fetchPokemon = async () => {
@@ -32,14 +35,13 @@ function App() {
 
         const formatted = data.results.map((p: Pokemon) => {
           const id = p.url.split("/")[6];
-          console.log(p);
           return {
             name: p.name,
             url: p.url,
             id,
-            image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
+            image: `${POKEMON_IMAGE_URL}${id}${POKEMON_IMAGE_EXT}`,
             sprites: {
-              front_default: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
+              front_default: `${POKEMON_IMAGE_URL}${id}${POKEMON_IMAGE_EXT}`,
             },
           };
         });

@@ -1,4 +1,5 @@
-const API_BASE_URL = "https://pokeapi.co/api/v2";
+import { ENV } from "../config/env";
+const API_BASE_URL = ENV.API_BASE_URL;
 
 export async function apiGet<T>(endpoint: string): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${endpoint}`);

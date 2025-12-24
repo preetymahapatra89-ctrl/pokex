@@ -4,6 +4,8 @@ import type { PokemonDetailsProps } from "../types/pokemonDetails";
 import type { Pokemon, PokemonAdditionalDetails } from "../types/pokemon";
 import ConfirmModal from "./ui/ConfirmModal";
 import { getPokemonById } from "../services/pokemon.service";
+import { ENV } from "../config/env";
+const FAVOURITE_STORAGE_KEY = ENV.FAVOURITE_STORAGE_KEY;
 
 export default function PokemonDetails({
   setError,
@@ -39,7 +41,9 @@ export default function PokemonDetails({
   if (!pokemon) {
     return <p>Loading Pokémon...</p>;
   }
-  const favourites = JSON.parse(localStorage.getItem("favourites") || "[]");
+  const favourites = JSON.parse(
+    localStorage.getItem(FAVOURITE_STORAGE_KEY) || "[]"
+  );
 
   const isFavourite = favourites.some((p: Pokemon) => p.id === pokemon.id);
 
@@ -54,7 +58,10 @@ export default function PokemonDetails({
     const updatedFavourites = favourites.filter(
       (p: Pokemon) => p.id !== pokemonToRemove
     );
-    localStorage.setItem("favourites", JSON.stringify(updatedFavourites));
+    localStorage.setItem(
+      FAVOURITE_STORAGE_KEY,
+      JSON.stringify(updatedFavourites)
+    );
     setPokemonToRemove(null);
     setShowConfirm(false);
   };

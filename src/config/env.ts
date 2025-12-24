@@ -1,0 +1,9 @@
+// src/config/env.ts
+export const ENV = {
+  API_BASE_URL: import.meta.env.VITE_POKEMON_BASE_API_URL,
+  COLORS: import.meta.env.VITE_RECHART_COLORS,
+  POKEMON_IMAGE_URL: import.meta.env.VITE_POKEMON_IMAGE_URL,
+  POKEMON_IMAGE_EXT: import.meta.env.VITE_POKEMON_IMAGE_EXT,
+  COMMENT_STORAGE_KEY: import.meta.env.VITE_LS_COMMENT_STORAGE_KEY,
+  FAVOURITE_STORAGE_KEY: import.meta.env.VITE_LS_FAVOURITE_STORAGE_KEY,
+};
