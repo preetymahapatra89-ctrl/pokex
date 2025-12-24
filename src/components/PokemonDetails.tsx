@@ -39,7 +39,6 @@ export default function PokemonDetails({
   if (!pokemon) {
     return <p>Loading Pokémon...</p>;
   }
-
   const favourites = JSON.parse(localStorage.getItem("favourites") || "[]");
 
   const isFavourite = favourites.some((p: Pokemon) => p.id === pokemon.id);

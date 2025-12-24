@@ -9,7 +9,7 @@ a:hover {
 }
 
 body {
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
 }
 
 h1 {
@@ -37,9 +37,8 @@ button:focus-visible {
 }
  */
 
-
 @media (prefers-color-scheme: light) {
- /*  :root {
+  /*  :root {
     color: #213547;
     background-color: #ffffff;
   } */
@@ -49,14 +48,14 @@ button:focus-visible {
   /* button {
     background-color: #f9f9f9;
   } */
-/*   .header {
+  /*   .header {
     text-align: center;
     padding: 2px 2px;
     background: #ffcb05;
     color: #2a75bb;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   } */
- /*  .footer {
+  /*  .footer {
     text-align: center;
     padding: 20px;
     margin-top: 30px;

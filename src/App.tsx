@@ -12,6 +12,7 @@ import Footer from "./components/footer";
 import type { Pokemon } from "../src/types/pokemon";
 import PokemonGrid from "../src/components/PokemonGrid";
 import { getPokemonList } from "./services/pokemon.service";
+import NotFound from "./components/NotFound";
 
 function App() {
   const [allPokemon, setAllPokemon] = useState<Pokemon[]>([]);
@@ -122,6 +123,9 @@ function App() {
               />
             }
           />
+
+          {/* 404 Page */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
 
