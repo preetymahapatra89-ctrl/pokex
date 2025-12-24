@@ -109,6 +109,8 @@ function App() {
                 setLoading={setLoading}
                 loading={loading}
                 addToFavourite={addToFavourite}
+                favourites={favourites}
+                setFavourites={setFavourites}
               />
             }
           />

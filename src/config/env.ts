@@ -1,4 +1,3 @@
-// src/config/env.ts
 export const ENV = {
   API_BASE_URL: import.meta.env.VITE_POKEMON_BASE_API_URL,
   COLORS: import.meta.env.VITE_RECHART_COLORS,

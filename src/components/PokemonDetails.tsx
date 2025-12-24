@@ -13,6 +13,7 @@ export default function PokemonDetails({
   setLoading,
   loading,
   addToFavourite,
+  setFavourites,
 }: PokemonDetailsProps) {
   const [pokemon, setPokemon] = useState<PokemonAdditionalDetails | null>(null);
   const { id } = useParams();
@@ -64,6 +65,7 @@ export default function PokemonDetails({
     );
     setPokemonToRemove(null);
     setShowConfirm(false);
+    setFavourites(updatedFavourites);
   };
 
   const cancelDelete = () => {

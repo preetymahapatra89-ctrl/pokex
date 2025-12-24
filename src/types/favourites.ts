@@ -1,7 +1,9 @@
-import type { Pokemon } from "./pokemon";
+import type { PokemonAdditionalDetails } from "./pokemon";
 export interface FavouritesProps {
-  favourites: Pokemon[];
-  setFavourites: React.Dispatch<React.SetStateAction<Pokemon[]>>;
+  favourites: PokemonAdditionalDetails[];
+  setFavourites: React.Dispatch<
+    React.SetStateAction<PokemonAdditionalDetails[]>
+  >;
   componentName: string;
   setComponentName: React.Dispatch<React.SetStateAction<string>>;
 }
