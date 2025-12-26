@@ -28,9 +28,11 @@ export default function PokemonDetails({
         const data = await getPokemonById(id);
         setPokemon(data);
         setLoading(false);
-      } catch {
-        setError(true);
+      } catch (err) {
+        console.error("Failed to fetch Pokemon Details:", err);
+        setPokemon(null);
         setLoading(false);
+        setError(true);
       }
     };
 

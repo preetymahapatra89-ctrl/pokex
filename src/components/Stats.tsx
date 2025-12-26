@@ -15,31 +15,37 @@ export default function PokemonTypeDistribution() {
 
   useEffect(() => {
     async function loadTypes() {
-      // Fetch Pokémon
-      const list = await getPokemonList(20);
+      try {
+        // Fetch Pokémon
+        const list = await getPokemonList(100);
 
-      const typeCount: Record<string, number> = {};
+        const typeCount: Record<string, number> = {};
 
-      for (const p of list.results) {
-        const pokemonRes = await fetch(p.url);
-        const pokemon = await pokemonRes.json();
+        for (const p of list.results) {
+          const pokemonRes = await fetch(p.url);
+          const pokemon = await pokemonRes.json();
 
-        pokemon.types.forEach((t: PokemonStat) => {
-          const typeName = t.type.name;
-          typeCount[typeName] = (typeCount[typeName] || 0) + 1;
-        });
+          pokemon.types.forEach((t: PokemonStat) => {
+            const typeName = t.type.name;
+            typeCount[typeName] = (typeCount[typeName] || 0) + 1;
+          });
+        }
+
+        // Convert to Recharts format
+        const formatted: PokemonStatForChart[] = Object.entries(typeCount).map(
+          ([type, count]) => ({
+            name: type,
+            value: count,
+          })
+        );
+
+        setData(formatted);
+        setLoading(false);
+      } catch (err) {
+        console.error("Failed to fetch Pokemon List:", err);
+        setData([]);
+        setLoading(false);
       }
-
-      // Convert to Recharts format
-      const formatted: PokemonStatForChart[] = Object.entries(typeCount).map(
-        ([type, count]) => ({
-          name: type,
-          value: count,
-        })
-      );
-
-      setData(formatted);
-      setLoading(false);
     }
 
     loadTypes();

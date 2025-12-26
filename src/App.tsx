@@ -48,7 +48,8 @@ function App() {
         setAllPokemon(formatted);
         setFiltered(formatted);
         setLoading(false);
-      } catch {
+      } catch (err) {
+        console.error("Failed to fetch Pokemons:", err);
         setError(true);
         setLoading(false);
       }
