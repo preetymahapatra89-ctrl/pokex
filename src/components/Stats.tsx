@@ -1,7 +1,17 @@
 import { useEffect, useState } from "react";
 import BaseStatSinglePokemon from "./BaseStatSinglePokemon";
-import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
-import { Bar, BarChart, XAxis, YAxis } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  Bar,
+  BarChart,
+  XAxis,
+  YAxis,
+} from "recharts";
 import type { PokemonStat, PokemonStatForChart } from "../types/pokemonStat";
 import { getPokemonList } from "../services/pokemon.service";
 import { ENV } from "../config/env";
@@ -55,23 +65,11 @@ export default function PokemonTypeDistribution() {
 
   return (
     <>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "flex-start",
-          gap: "40px", // space between charts
-          flexWrap: "wrap", // allows wrap on small screens
-        }}
-      >
+      <div className="flex justify-center items-start gap-6 md:gap-10 flex-wrap">
         <PieChart
           width={450}
           height={450}
-          style={{
-            border: "2px solid black",
-            paddingTop: "40px",
-            marginTop: "20px",
-          }}
+          className="border-2 border-black pt-10 mt-5 rounded-lg shadow-md"
         >
           <Pie
             dataKey="value"
@@ -91,7 +89,28 @@ export default function PokemonTypeDistribution() {
           <Tooltip />
           <Legend />
         </PieChart>
-        <BarChart
+        <div className="w-full max-w-[800px] max-h-[80vh] aspect-[1.618] border-2 border-black mt-5">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data}>
+              <XAxis dataKey="name" />
+              <YAxis
+                type="number"
+                width={100}
+                label={{
+                  value: "No. of Pokemons",
+                  position: "insideLeft",
+                  dx: 0,
+                  dy: 20,
+                  angle: -90,
+                }}
+              />
+              <Bar dataKey="value" unit="" />
+              <Tooltip />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* <BarChart
           style={{
             width: "100%",
             maxWidth: "800px",
@@ -117,7 +136,7 @@ export default function PokemonTypeDistribution() {
           />
           <Bar dataKey="value" unit="" />
           <Tooltip />
-        </BarChart>
+        </BarChart> */}
       </div>
       <BaseStatSinglePokemon />
     </>
